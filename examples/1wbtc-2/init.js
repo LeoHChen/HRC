@@ -62,18 +62,20 @@ async function handle_transfer() {
    token = $('input[type=radio][name=token]:checked').val();
 
    $('input[type=text][name=status]').val(to);
+   var raw = null
+
    try {
       if ( token == "1wbtc" ) {
-         await ONEWBTC.methods.transfer(to, amount).call(CALL_OPTION);
+         raw = await ONEWBTC.methods.transfer(to, amount).send(CALL_OPTION);
       } else {
-         await WONE.methods.transfer(to, amount).call(CALL_OPTION);
+         raw = await WONE.methods.transfer(to, amount).send(CALL_OPTION);
       }
    } catch (e) {
       console.error(e);
    } finally {
-      console.log("cleanup");
+      console.log(raw);
    }
-   $('input[type=text][name=token_status]').val(to);
+   $('input[type=text][name=token_status]').val(raw);
 }
 
 async function handle_burn() {
@@ -127,9 +129,9 @@ async function do_burn() {
 
    try {
       if ( token == "1wbtc" ) {
-         await ONEWBTC.methods.burn(amount).call(CALL_OPTION);
+         await ONEWBTC.methods.burn(amount).send(CALL_OPTION);
       } else {
-         await WONE.methods.burn(amount).call(CALL_OPTION);
+         await WONE.methods.burn(amount).send(CALL_OPTION);
       }
    } catch (e) {
       console.error(e);
